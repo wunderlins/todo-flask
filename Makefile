@@ -6,6 +6,6 @@ bower:
 pip:
 	pip install --ignore-installed -t lib/site-packages Flask Flask-ZODB
 	touch lib/site-packages/__init__.py
-	touch lib/__init__.py
+	#touch lib/__init__.py
 
 dep: bower pip
