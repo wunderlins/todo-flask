@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """
+flask + SQLAlchemy example
 
 run
  - cli mode: $ FLASK_CLI=1 ./example.py mycmd
