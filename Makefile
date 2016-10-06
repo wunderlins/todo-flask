@@ -11,4 +11,4 @@ pip:
 dep: bower pip
 
 linux:
-	pyinstaller -s -n cli --distpath dist/linux -F bin/cli
+	pyinstaller -s -n cli --paths=lib/ --paths=lib/site-packages/ --distpath dist/linux -F bin/cli
