@@ -9,3 +9,6 @@ pip:
 	#touch lib/__init__.py
 
 dep: bower pip
+
+linux:
+	pyinstaller -s -n cli --distpath dist/linux -F bin/cli

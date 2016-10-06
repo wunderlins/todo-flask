@@ -1,0 +1,87 @@
+#!/usr/bin/env python
+
+# paths
+import sys, os
+if getattr(sys, 'frozen', False):
+	# we are running in a bundle
+	basedir = sys._MEIPASS
+else:
+	# we are running in a normal Python environment
+	basedir = os.path.realpath(os.path.dirname(__file__) + "/..")
+sys.path.insert(1, os.path.join(basedir, "lib/site-packages"))
+sys.path.insert(1, os.path.join(basedir, "lib"))
+
+# libraries
+import click
+from flask import Flask
+from flask import jsonify
+from flask_sqlalchemy import SQLAlchemy
+from flask import escape
+
+# application setup
+app_name = "todo"
+app = Flask(__name__)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../var/test.db'
+os.environ['FLASK_APP'] = __name__ # required for cli commands
+db = SQLAlchemy(app)
+
+def traverse(n):
+	if len(n.children):
+		print n
+		for e in n.children:
+			traverse(e)
+	else:
+		print n
+
+@app.cli.command()
+def displayrec():
+	""" display the root node """
+	root = Node.query.get(1)
+	traverse(root)
+	
+@app.cli.command()
+def samplerec():
+	""" Generate a sample records for testing """
+	r = Node("Root")
+	n1 = Node("Erster")
+	r.children.append(n1)
+	n2 = Node("Zweiter")
+	r.children.append(n2)
+	n3 = Node("zwei drei")
+	n2.children.append(n3)
+	db.session.add(r)
+	db.session.commit()
+
+@app.cli.command()
+def makedb():
+	"""create empty database """
+	db.create_all()
+
+if __name__ == "__main__":
+	import flask
+	from re import sub
+
+	sys.argv[0] = sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+	flask.cli.cli = flask.cli.FlaskGroup(help="""\
+Maintenenace script for %(app_name)s
+
+Example usage:
+
+\b
+# run a debug web server
+%(prefix)s%(cmd)s FLASK_DEBUG=1
+%(prefix)s%(exe_name)s run
+
+# create an empty database
+%(prefix)s%(exe_name)s makedb # todo, add path parameter for db file
+	""" % {
+		  'cmd': os.name == 'posix' and 'export' or 'set',
+		  'prefix': os.name == 'posix' and '$ ' or '',
+		  'name': str(app.name),
+		  'app_name': app_name,
+		  'exe_name': sys.argv[0],
+	})
+
+	sys.exit(flask.cli.main())
+
