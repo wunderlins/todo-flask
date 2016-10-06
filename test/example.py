@@ -17,6 +17,7 @@ import click
 from flask import Flask
 from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask import escape
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -43,7 +44,8 @@ class Node(db.Model):
 @app.route('/')
 def hello_world():
 	ret = json.dumps(app.config, indent=4, default=lambda x:str(x))
-	return ret
+	root = Node.query.get(1)
+	return "Root: " + escape(str(root))
 
 def traverse(n):
 	if len(n.children):
