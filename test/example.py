@@ -38,13 +38,26 @@ class Node(db.Model):
 		#self.parent = parent
 
 	def __repr__(self):
-		return '<Node [%d/%d] %s>' % (self.id, self.parent, self.name)
+		return '<Node [%d/%s] %s>' % (self.id, self.parent, self.name)
 
 @app.route('/')
 def hello_world():
 	ret = json.dumps(app.config, indent=4, default=lambda x:str(x))
 	return ret
 
+def traverse(n):
+	if len(n.children):
+		print n
+		for e in n.children:
+			traverse(e)
+	else:
+		print n
+
+@app.cli.command()
+def displayrec():
+	root = Node.query.get(1)
+	traverse(root)
+	
 @app.cli.command()
 def samplerec():
 	""" Generate a sample records for testing """
