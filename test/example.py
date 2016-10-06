@@ -16,10 +16,8 @@ import click
 from flask import Flask
 from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask.cli import main
 
 app = Flask(__name__)
-os.environ['FLASK_APP'] = __name__ # required for cli commands
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../var/test.db'
 db = SQLAlchemy(app)
@@ -47,14 +45,11 @@ def hello_world():
 def mycmd():
     click.echo("Test ...")
 
-def cli():
-	"""run application in cli mode """
-	sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
-	sys.exit(main())
-
-
 if __name__ == "__main__":
 	if os.getenv("FLASK_CLI", default=None):
-		cli()
+		from flask.cli import main
+		os.environ['FLASK_APP'] = __name__ # required for cli commands
+		sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+		sys.exit(main())
 	else:
 		app.run(debug=True)
