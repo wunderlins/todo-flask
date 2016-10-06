@@ -1,15 +1,25 @@
 #!/usr/bin/env python
+"""
+
+run
+ - cli mode: $ FLASK_CLI=1 ./example.py mycmd
+ - www mode: $ ./example.py
+"""
 
 # library path
-import sys, os
+import sys, os, json, re
 basedir = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(1, os.path.realpath(os.path.join(basedir, "../lib/site-packages")))
 sys.path.insert(1, os.path.realpath(os.path.join(basedir, "../lib")))
 
+import click
 from flask import Flask
+from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask.cli import main
 
 app = Flask(__name__)
+os.environ['FLASK_APP'] = __name__ # required for cli commands
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../var/test.db'
 db = SQLAlchemy(app)
@@ -30,7 +40,21 @@ class User(db.Model):
 
 @app.route('/')
 def hello_world():
-	return 'Hello, World!'
+	ret = json.dumps(app.config, indent=4, default=lambda x:str(x))
+	return ret
+
+@app.cli.command()
+def mycmd():
+    click.echo("Test ...")
+
+def cli():
+	"""run application in cli mode """
+	sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+	sys.exit(main())
+
 
 if __name__ == "__main__":
-	app.run()
+	if os.getenv("FLASK_CLI", default=None):
+		cli()
+	else:
+		app.run(debug=True)
