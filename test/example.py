@@ -25,17 +25,20 @@ db = SQLAlchemy(app)
 
 #print "\n".join(sys.path)
 
-class User(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	username = db.Column(db.String(80), unique=True)
-	email = db.Column(db.String(120), unique=True)
-
-	def __init__(self, username, email):
-		self.username = username
-		self.email = email
+class Node(db.Model):
+	__tablename__ = 'node'
+	id     = db.Column(db.Integer, primary_key=True)
+	parent = db.Column(db.Integer, db.ForeignKey("node.id"), nullable=True)
+	name   = db.Column(db.String(80))
+	
+	children = db.relationship("Node")
+	
+	def __init__(self, name):
+		self.name   = name
+		#self.parent = parent
 
 	def __repr__(self):
-		return '<User %r>' % self.username
+		return '<Node [%d/%d] %s>' % (self.id, self.parent, self.name)
 
 @app.route('/')
 def hello_world():
@@ -43,8 +46,21 @@ def hello_world():
 	return ret
 
 @app.cli.command()
-def mycmd():
-    click.echo("Test ...")
+def samplerec():
+	""" Generate a sample records for testing """
+	r = Node("Root")
+	n1 = Node("Erster")
+	r.children.append(n1)
+	n2 = Node("Zweiter")
+	r.children.append(n2)
+	n3 = Node("zwei drei")
+	n2.children.append(n3)
+	db.session.add(r)
+	db.session.commit()
+
+@app.cli.command()
+def makedb():
+	db.create_all()
 
 if __name__ == "__main__":
 	if os.getenv("FLASK_CLI", default=None):
