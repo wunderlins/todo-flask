@@ -1,0 +1,30 @@
+#!/usr/bin/env python
+
+# paths
+import sys, os
+if getattr(sys, 'frozen', False):
+	# we are running in a bundle
+	basedir = sys._MEIPASS
+	exe     = os.path.realpath(sys.executable)
+else:
+	# we are running in a normal Python environment
+	basedir = os.path.realpath(os.path.dirname(__file__) + "/..")
+	exe     = os.path.realpath(sys.argv[0])
+sys.path.insert(1, os.path.join(basedir, "lib/site-packages"))
+sys.path.insert(1, os.path.join(basedir, "lib"))
+
+#print """exe: % s
+#basedir: %s""" % (exe, basedir)
+
+# libraries
+from flask import escape
+from core import *
+
+@app.route('/')
+def hello_world():
+	ret = json.dumps(app.config, indent=4, default=lambda x:str(x))
+	root = Node.query.get(1)
+	return "Root: " + escape(str(root))
+
+if __name__ == "__main__":
+	app.run(debug=True)
