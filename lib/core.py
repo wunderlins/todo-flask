@@ -66,19 +66,28 @@ def traverse(n):
 class NodeError(Exception):
 	"""node exeptions"""
 	code    = None
+	type = None
 	message = None
+	__errors = [
+		"Unknown", # 0
+		"Name"
+	]
+	__err_messages = [
+		"An unhandled error occured",
+		"Failed to create node. The name must not start with '_' and shall not contain any of these characters: ^/?#;"
+	]
 	
-	def __init__(self, code, message):
+	def __init__(self, code):
 		"""node error message
 		
 		code: integer
-		message: string
 		"""
 		self.code = code
-		self.message = message
+		self.type = self.__errors[code]
+		self.message = self.__err_messages[code]
 	
 	def __str__(self):
-		return self.message
+		return "(" + self.type + ") " + self.message
 	
 	def __repr__(self):
 		return "<NodeError: " + str(self.code) + " " + self.message + ">"
@@ -90,7 +99,7 @@ class Node(db.Model):
 	the root node is None.
 	
 	A nodes name may not begin with '_' and must not contain the following 
-	characters: ^, /, ?, #.
+	characters: ^, /, ?, #, ;.
 	
 	"""
 	
@@ -108,15 +117,11 @@ class Node(db.Model):
 	
 	# FIXME: add path variable to nodes for quicker lookups by name
 	
-	"""
-	FIXME: disallow certain characters in names:
-	- /
-	- ^_
-	- ?
-	- #
-	"""
-	
 	def __init__(self, name):
+		
+		if name[0] == "_" or '/' in name or '?' in name or '#' in name or ';' not in name:
+			raise NodeError(1)
+		
 		self.name = name
 		#self.parent = parent
 

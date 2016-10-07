@@ -29,7 +29,7 @@ def displayrec():
 @app.cli.command()
 def samplerec():
 	""" Generate a sample records for testing """
-	r = Node.query.get(0)
+	r = Node.query.get(1)
 	n1 = Node("Erster")
 	r.children.append(n1)
 	n2 = Node("Zweiter")
