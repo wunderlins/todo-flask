@@ -18,7 +18,6 @@ sys.path.insert(1, os.path.join(basedir, "lib"))
 
 # libraries
 import click
-from flask import escape
 from core import *
 
 @app.cli.command()

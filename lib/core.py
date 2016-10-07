@@ -2,6 +2,7 @@ import sys, os
 from flask import Flask
 from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
+import json
 
 # application setup
 app_name = "todo"
@@ -13,11 +14,11 @@ db = SQLAlchemy(app)
 
 def traverse(n):
 	if len(n.children):
-		print n
+		print n.tojson()
 		for e in n.children:
 			traverse(e)
 	else:
-		print n
+		print n.tojson()
 
 class Node(db.Model):
 	__tablename__ = 'node'
@@ -33,3 +34,11 @@ class Node(db.Model):
 
 	def __repr__(self):
 		return '<Node [%d/%s] %s>' % (self.id, self.parent, self.name)
+		
+	def tojson(self):
+		return json.dumps({
+			"id": self.id,
+			"name": self.name,
+			"parent": self.parent,
+			"numc": len(self.children)
+		})
