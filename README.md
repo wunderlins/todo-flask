@@ -1,9 +1,8 @@
 # todo-flask
 
-## install 
+## install development environment
 
-	$ make dep
-	$ ./bin/cli makedb # create database
+	$ ./bin/setup.sh
 
 ## configuration
 Check `etc/config.ini`
