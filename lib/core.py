@@ -45,7 +45,7 @@ flask_config = {
 app_name = "todo"
 app = Flask(__name__, **flask_config)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../var/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../var/notes.db'
 os.environ['FLASK_APP'] = __name__ # required for cli commands
 
 # set flask config values

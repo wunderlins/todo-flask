@@ -3,20 +3,30 @@
 ## install 
 
 	$ make dep
+	$ ./bin/cli makedb # create database
 
 ## configuration
 Check `etc/config.ini`
 	
 ## run
-###as deamon
+### uWSGI (production)
+
+	$ ./bin/uwsgi.sh
+
+### as deamon
 
 	$ ./bin/httpd [--port NNN] [--host 0.0.0.0] &
 
-###command line
+### command line
 
 	$ ./bin/cli <command> # or
 	$ ./bin/cli --help
 
-###uWSGI (production)
+## resources
 
-	$ ./bin/uwsgi.sh
+	www/template/*  - flask templates
+	www/static/*    - static http files
+	etc/config.ini  - main configuration file
+	var/notes.db    - main database (sqlite3)
+
+

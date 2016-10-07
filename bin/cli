@@ -29,7 +29,7 @@ def displayrec():
 @app.cli.command()
 def samplerec():
 	""" Generate a sample records for testing """
-	r = Node("Root")
+	r = Node.query.get(1)
 	n1 = Node("Erster")
 	r.children.append(n1)
 	n2 = Node("Zweiter")
@@ -43,6 +43,10 @@ def samplerec():
 def makedb():
 	"""create empty database """
 	db.create_all()
+	
+	r = Node("Root")
+	db.session.add(r)
+	db.session.commit()
 
 if __name__ == "__main__":
 	import flask
