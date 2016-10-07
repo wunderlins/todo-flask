@@ -55,19 +55,55 @@ for e in cfg["flask"]:
 db = SQLAlchemy(app)
 
 def traverse(n):
+	""" pritn all nodes in the tree """
 	if len(n.children):
-		print n.to_dict()
+		print n
 		for e in n.children:
 			traverse(e)
 	else:
-		print n.to_dict()
+		print n
+
+class NodeError(Exception):
+	"""node exeptions"""
+	code    = None
+	message = None
+	
+	def __init__(self, code, message):
+		"""node error message
+		
+		code: integer
+		message: string
+		"""
+		self.code = code
+		self.message = message
+	
+	def __str__(self):
+		return self.message
+	
+	def __repr__(self):
+		return "<NodeError: " + str(self.code) + " " + self.message + ">"
 
 class Node(db.Model):
+	"""Node tree class
+	
+	Every node has a parent (id of the parent) and 0-N children. The parent of 
+	the root node is None.
+	
+	A nodes name may not begin with '_' and must not contain the following 
+	characters: ^, /, ?, #.
+	
+	"""
+	
+	name   = ""
+	parent = None
+	
+	# database options
 	__tablename__ = 'node'
+	
+	# schema
 	id     = db.Column(db.Integer, primary_key=True)
 	parent = db.Column(db.Integer, db.ForeignKey("node.id"), nullable=True)
 	name   = db.Column(db.String(80))
-	
 	children = db.relationship("Node")
 	
 	# FIXME: add path variable to nodes for quicker lookups by name
@@ -81,11 +117,11 @@ class Node(db.Model):
 	"""
 	
 	def __init__(self, name):
-		self.name   = name
+		self.name = name
 		#self.parent = parent
 
 	def __repr__(self):
-		return '<Node [%d/%s] %s>' % (self.id, self.parent, self.name)
+		return '<Node [%d/%s/%d] %s>' % (self.id, self.parent, len(self.children), self.name)
 		
 	def to_dict(self):
 		return {

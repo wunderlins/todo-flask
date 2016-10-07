@@ -20,3 +20,5 @@ clean:
 	rm -rf lib/site-packages/* | true
 	find ./ -iname "*~" -exec rm {} \;
 
+dump:
+	sqlite3 var/notes.db .dump
