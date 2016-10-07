@@ -2,6 +2,7 @@
 
 # paths
 import sys, os
+
 if getattr(sys, 'frozen', False):
 	# we are running in a bundle
 	basedir = sys._MEIPASS
@@ -17,14 +18,20 @@ sys.path.insert(1, os.path.join(basedir, "lib"))
 #basedir: %s""" % (exe, basedir)
 
 # libraries
-from flask import escape
 from core import *
+from flask import escape
+from flask import jsonify
 
 @app.route('/')
 def hello_world():
 	ret = json.dumps(app.config, indent=4, default=lambda x:str(x))
 	root = Node.query.get(1)
 	return "Root: " + escape(str(root))
+
+@app.route("/_/get/<int:id>")
+def get_by_id(id):
+	n = Node.query.get(id).to_dict()
+	return jsonify(**n)
 
 if __name__ == "__main__":
 	app.run(debug=True)

@@ -28,6 +28,16 @@ class Node(db.Model):
 	
 	children = db.relationship("Node")
 	
+	# FIXME: add path variable to nodes for quicker lookups by name
+	
+	"""
+	FIXME: disallow certain characters in names:
+	- /
+	- ^_
+	- ?
+	- #
+	"""
+	
 	def __init__(self, name):
 		self.name   = name
 		#self.parent = parent
@@ -35,10 +45,10 @@ class Node(db.Model):
 	def __repr__(self):
 		return '<Node [%d/%s] %s>' % (self.id, self.parent, self.name)
 		
-	def tojson(self):
-		return json.dumps({
+	def to_dict(self):
+		return {
 			"id": self.id,
 			"name": self.name,
 			"parent": self.parent,
 			"numc": len(self.children)
-		})
+		}
