@@ -1,7 +1,7 @@
 .PHONY:
 
 bower:
-	cd www; bower install
+	cd www/static; bower install
 
 pip:
 	pip install --ignore-installed -t lib/site-packages Flask Flask-SQLAlchemy
