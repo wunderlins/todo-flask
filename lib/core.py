@@ -15,18 +15,43 @@ from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
 import json
 
-# application setup
-cfg = {
+# read configuration file
+import ConfigParser
+cfg = {}
+_cfg = ConfigParser.ConfigParser()
+_cfg.read(basedir + "/etc/config.ini")
+
+for s in _cfg.sections():
+	#print "[" + s + "]"
+	cfg[s] = {}
+	for o in _cfg.options(s):
+		#print "%s: %s" % (o, _cfg.get(s, o))
+		cfg[s][o] = _cfg.get(s, o)
+		
+		# cast int values to int
+		if s == "webserver" and o == "port" or \
+		   s == "flask" and o == "debug":
+			cfg[s][o] = int(cfg[s][o])
+#print cfg
+#sys.exit(0)
+
+# flask startup options
+flask_config = {
 	"static_folder": basedir + "/www/static",
 	"static_url_path": "/static",
 	"template_folder": basedir + "/www/template"
 }
 
 app_name = "todo"
-app = Flask(__name__, **cfg)
+app = Flask(__name__, **flask_config)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../var/test.db'
 os.environ['FLASK_APP'] = __name__ # required for cli commands
+
+# set flask config values
+for e in cfg["flask"]:
+	app.config[e.upper()] = cfg["flask"][e]
+
 db = SQLAlchemy(app)
 
 def traverse(n):

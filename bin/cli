@@ -49,6 +49,18 @@ if __name__ == "__main__":
 	from re import sub
 
 	sys.argv[0] = sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+	
+	if len(sys.argv) > 1 and sys.argv[1] == "run":
+		# if host is not given on the command line, then set etc/config.ini 
+		# value as default
+		if "--host" not in sys.argv:
+			sys.argv.append("--host")
+			sys.argv.append(cfg["webserver"]["host"])
+		# dito for the port
+		if "--port" not in sys.argv:
+			sys.argv.append("--port")
+			sys.argv.append(cfg["webserver"]["port"])
+	
 	flask.cli.cli = flask.cli.FlaskGroup(help="""\
 Maintenenace script for %(app_name)s
 

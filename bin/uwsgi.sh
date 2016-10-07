@@ -2,10 +2,10 @@
 
 #uwsgi --plugin python,http --http :5000 --manage-script-name --mount /todo=bin/httpd:app
 
-echo "$(cat ./etc/todo.cfg | ./bin/ini2basharr.py)"
-exit
+#echo "$(cat ./etc/config.ini | ./bin/ini2basharr.py)"
+eval "$(cat ./etc/config.ini | ./bin/ini2basharr.py)"
 
-uwsgi --http-socket 0.0.0.0:5000 \
+uwsgi --http-socket ${webserver[host]}:${webserver[port]} \
       --plugin python \
       --wsgi-file ./bin/httpd \
       --callable app \
