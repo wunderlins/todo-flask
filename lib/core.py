@@ -115,11 +115,15 @@ class Node(db.Model):
 	name   = db.Column(db.String(80))
 	children = db.relationship("Node")
 	
+	# note properties
+	comment = db.Column(db.Text)
+	ts_ins  = db.Column(db.DateTime)
+	ts_mut  = db.Column(db.DateTime)
+	
 	# FIXME: add path variable to nodes for quicker lookups by name
 	
 	def __init__(self, name):
-		
-		if name[0] == "_" or '/' in name or '?' in name or '#' in name or ';' not in name:
+		if name[0] == "_" or '/' in name or '?' in name or '#' in name or ';' in name:
 			raise NodeError(1)
 		
 		self.name = name
