@@ -71,7 +71,11 @@
 				nodes: nodes,
 				edges: edges
 			};
-			var options = {};
+			var options = {
+				manipulation: {
+					addNode: true
+				}
+			};
 			var network = new vis.Network(container, data, options);
 		}
 		

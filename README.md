@@ -1,5 +1,7 @@
 # todo-flask
 
+Check: http://js.cytoscape.org/#demos for graphing
+
 ## install development environment
 
 	$ ./bin/setup.sh
