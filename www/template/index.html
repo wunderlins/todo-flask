@@ -40,28 +40,31 @@
 				html_element["on" + event_name] = event_function;
 			}
 		};
+
+		function json_get(path) {
+			var request = new XMLHttpRequest();
+			request.onreadystatechange = function() {
+				if(request.readyState === 4) {
+					//bio.style.border = '1px solid #e8e8e8';
+					if(request.status === 200) {
+						var data = JSON.parse(request.responseText);
+						console.log(data);
+						build_nodes(data.nodes, data.edges);
+					} else {
+						console.log('An error occurred during your request: ' +  request.status + ' ' + request.statusText);
+					} 
+				}
+			}
+			request.open('GET', path);
+			request.send();
+		}
+				
+		function appinit(nodes, edges) {
+			json_get("/_/get/vis");
+		}
 		
-		function appinit() {
-			// create an array with nodes
-			var nodes = new vis.DataSet([
-				{id: 1, label: 'Node 1'},
-				{id: 2, label: 'Node 2'},
-				{id: 3, label: 'Node 3'},
-				{id: 4, label: 'Node 4'},
-				{id: 5, label: 'Node 5'}
-			]);
-
-			// create an array with edges
-			var edges = new vis.DataSet([
-				{from: 1, to: 3},
-				{from: 1, to: 2},
-				{from: 2, to: 4},
-				{from: 2, to: 5}
-			]);
+		function build_nodes(nodes, edges) {
 			
-			// TODO: add ajax request to fetch nodes from /_/get/vis
-			//nodes = 
-
 			// create a network
 			var container = document.getElementById('lower');
 			var data = {
@@ -73,6 +76,7 @@
 		}
 		
 		add_event(window, "load", appinit);
+		
   </script>
   <!--script type="text/javascript" src="/_/get/vis"></script-->
 
