@@ -6,6 +6,8 @@
   <script type="text/javascript" src="{{ url_for('static', filename='lib/jquery/dist/jquery.min.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='lib/cytoscape/dist/cytoscape.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='lib/cytoscape-cxtmenu/cytoscape-cxtmenu.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='lib/cytoscape-panzoom/cytoscape-panzoom.js') }}"></script>
+
   <!--link href="{{ url_for('static', filename='lib/vis/dist/vis.css') }}" rel="stylesheet" type="text/css" /-->
 
   <style type="text/css">
@@ -14,6 +16,11 @@
   		padding: 0; 
   		border: 0; 
   		margin: 0;
+  		
+			-webkit-user-select: none;  /* Chrome all / Safari all */
+			-moz-user-select: none;     /* Firefox all */
+			-ms-user-select: none;      /* IE 10+ */
+			user-select: none;          /* Likely future */ 
   	}
   	
   	#upper {}
@@ -160,7 +167,7 @@
 				spotlightPadding: 4, // extra spacing in pixels between the element and the spotlight
 				minSpotlightRadius: 24, // the minimum radius in pixels of the spotlight
 				maxSpotlightRadius: 38, // the maximum radius in pixels of the spotlight
-				openMenuEvents: 'cxttapstart', // cytoscape events that will open the menu (space separated)
+				openMenuEvents: 'cxttapstart taphold', // cytoscape events that will open the menu (space separated)
 				itemColor: 'white', // the colour of text in the command's content
 				itemTextShadowColor: 'black', // the text shadow colour of the command's content
 				zIndex: 9999, // the z-index of the ui div
@@ -168,6 +175,35 @@
 			};
 			
 			var cxtmenuApi = cy.cxtmenu(defaults);
+		
+			// the default values of each option are outlined below:
+			var defaults = {
+				zoomFactor: 0.05, // zoom factor per zoom tick
+				zoomDelay: 45, // how many ms between zoom ticks
+				minZoom: 0.1, // min zoom level
+				maxZoom: 10, // max zoom level
+				fitPadding: 50, // padding when fitting
+				panSpeed: 10, // how many ms in between pan ticks
+				panDistance: 10, // max pan distance per tick
+				panDragAreaSize: 75, // the length of the pan drag box in which the vector for panning is calculated (bigger = finer control of pan speed and direction)
+				panMinPercentSpeed: 0.25, // the slowest speed we can pan by (as a percent of panSpeed)
+				panInactiveArea: 8, // radius of inactive area in pan drag box
+				panIndicatorMinOpacity: 0.5, // min opacity of pan indicator (the draggable nib); scales from this to 1.0
+				zoomOnly: false, // a minimal version of the ui only with zooming (useful on systems with bad mousewheel resolution)
+				fitSelector: undefined, // selector of elements to fit
+				animateOnFit: function(){ // whether to animate on fit
+					return false;
+				},
+				fitAnimationDuration: 1000, // duration of animation on fit
+
+				// icon class names
+				sliderHandleIcon: 'fa fa-minus',
+				zoomInIcon: 'fa fa-plus',
+				zoomOutIcon: 'fa fa-minus',
+				resetIcon: 'fa fa-expand'
+			};
+
+			cy.panzoom(defaults);
 		}
 		
 		todo.data = null;
