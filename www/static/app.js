@@ -12,18 +12,6 @@ var todo = {
 	json_get: function(path, callback) {
 		var request = new XMLHttpRequest();
 		request.onreadystatechange = function() {
-			/*
-			if(request.readyState === 4) {
-				//bio.style.border = '1px solid #e8e8e8';
-				if(request.status === 200) {
-					//var data = JSON.parse(request.responseText);
-					//console.log(data);
-					callback(request);
-					return true;
-				} else {
-					console.log('An error occurred during your request: ' + request.status + ' ' + request.statusText);
-				} 
-			} */
 			callback(request);
 		}
 		
@@ -32,19 +20,11 @@ var todo = {
 	}
 }
 
-function init_graph(todo_data) {
+todo.init_graph = function(todo_data) {
 	console.log(todo_data.elements)
 	// -- initialize cytoscape --
 	var cy = cytoscape({
 		container: document.getElementById('lower'), // container to render in
-		
-		/*
-		elements: [ // list of graph elements to start with
-			{ data: { id: 'a', label: "aaaa" }},
-			{ data: { id: 'b' }},
-			{ data: { id: 'ab', source: 'a', target: 'b' }} // edge ab 
-		],
-		*/
 		
 		elements: todo_data.elements,
 		
@@ -130,7 +110,8 @@ function init_graph(todo_data) {
 	};
 	
 	var cxtmenuApi = cy.cxtmenu(defaults);
-
+	
+	/*
 	// the default values of each option are outlined below:
 	var defaults = {
 		zoomFactor: 0.05, // zoom factor per zoom tick
@@ -159,16 +140,17 @@ function init_graph(todo_data) {
 	};
 
 	cy.panzoom(defaults);
+	*/
 }
 
 todo.data = null;
-function init() {
+todo.init = function() {
 	function req_handler(request) {
 		if(request.readyState === 4) {
 			if (request.status === 200) {
 				todo.data = JSON.parse(request.responseText);
 				//console.log(todo.data)
-				init_graph(todo.data);
+				todo.init_graph(todo.data);
 			} else {
 				// FIXME: handle http errors
 				console.log('An error occurred during your request: ' + request.status + ' ' + request.statusText);
@@ -178,4 +160,4 @@ function init() {
 	todo.json_get("/_/get/cy", req_handler);
 }
 
-todo.add_event(window, "load", init);
+todo.add_event(window, "load", todo.init);
