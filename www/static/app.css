@@ -1,0 +1,30 @@
+html, body {height: 100%;}
+body {
+	padding: 0; 
+	border: 0; 
+	margin: 0;
+	
+	-webkit-user-select: none;  /* Chrome all / Safari all */
+	-moz-user-select: none;     /* Firefox all */
+	-ms-user-select: none;      /* IE 10+ */
+	user-select: none;          /* Likely future */ 
+}
+
+#upper {}
+
+#lower {
+	display: block;
+}
+
+.halfheight {
+	padding: 0; 
+	border: 0; 
+	margin: 0;
+	
+  width: 100%;
+  height: 50%;
+  border: 0px solid lightgray;
+  
+  overflow: auto;
+}
+
