@@ -35,17 +35,40 @@
     }
   </style>
   <script type="application/javascript">
-  
-		function add_event(html_element, event_name, event_function) {
-			if (html_element.addEventListener) { // Modern
-				html_element.addEventListener(event_name, event_function, false);
-			} else if (html_element.attachEvent) { // Internet Explorer
-				html_element.attachEvent("on" + event_name, event_function);
-			} else { // others
-				html_element["on" + event_name] = event_function;
+  	
+  	var todo = {
+			add_event: function(html_element, event_name, event_function) {
+				if (html_element.addEventListener) { // Modern
+					html_element.addEventListener(event_name, event_function, false);
+				} else if (html_element.attachEvent) { // Internet Explorer
+					html_element.attachEvent("on" + event_name, event_function);
+				} else { // others
+					html_element["on" + event_name] = event_function;
+				}
+			},
+			
+			json_get: function(path, callback) {
+				var request = new XMLHttpRequest();
+				request.onreadystatechange = function() {
+					/*
+					if(request.readyState === 4) {
+						//bio.style.border = '1px solid #e8e8e8';
+						if(request.status === 200) {
+							//var data = JSON.parse(request.responseText);
+							//console.log(data);
+							callback(request);
+							return true;
+						} else {
+							console.log('An error occurred during your request: ' + request.status + ' ' + request.statusText);
+						} 
+					} */
+					callback(request);
+				}
+				
+				request.open('GET', path);
+				request.send();
 			}
-		};
-		
+		}
 		
 		function init_graph() {
 		
@@ -95,7 +118,7 @@
 						fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
 						content: 'Add', // html/text content to be displayed in the menu
 						select: function(ele){ // a function to execute when the command is selected
-							console.log( ele.id() ) // `ele` holds the reference to the active element
+							console.log( "add " + ele.id() ) // `ele` holds the reference to the active element
 						},
 						disabled: false // disables the item on true
 					}, 
@@ -103,7 +126,7 @@
 						fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
 						content: 'Edit', // html/text content to be displayed in the menu
 						select: function(ele){ // a function to execute when the command is selected
-							console.log( ele.id() ) // `ele` holds the reference to the active element
+							console.log( "edit: " + ele.id() ) // `ele` holds the reference to the active element
 						},
 						disabled: false // disables the item on true
 					}, 
@@ -111,7 +134,7 @@
 						fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
 						content: 'Delete', // html/text content to be displayed in the menu
 						select: function(ele){ // a function to execute when the command is selected
-							console.log( ele.id() ) // `ele` holds the reference to the active element
+							console.log( "delete: " + ele.id() ) // `ele` holds the reference to the active element
 						},
 						disabled: false // disables the item on true
 					}, 
@@ -131,12 +154,28 @@
 				atMouse: false // draw menu at mouse position
 			};
 			
-			var cxtmenuApi = cy.cxtmenu( defaults );
+			var cxtmenuApi = cy.cxtmenu(defaults);
+		}
+		
+		todo.data = null;
+		function init() {
+			function req_handler(request) {
+				if(request.readyState === 4) {
+					if (request.status === 200) {
+						todo.data = JSON.parse(request.responseText);
+						console.log(todo.data)
+						init_graph();
+					} else {
+						// FIXME: handle http errors
+						console.log('An error occurred during your request: ' + request.status + ' ' + request.statusText);
+					}
+				}
+			}
+			todo.json_get("/_/get/vis", req_handler);
 		}
 
-		add_event(window, "load", init_graph);
+		todo.add_event(window, "load", init);
   </script>
-  <!--script type="text/javascript" src="/_/get/vis"></script-->
 
 </head>
 <body>
