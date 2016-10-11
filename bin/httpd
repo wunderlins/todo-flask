@@ -66,17 +66,19 @@ def cy_list(n):
 	nodes = []
 	if len(n.children):
 		if n.parent:
-			nodes.append({"data": {"id": n.id, "label": n.name}})
-			nodes.append({"data": {"target": n.id , "source": n.parent, "id": str(n.parent)+"."+str(n.id)}})
+			nodes.append({"data": {"id": "n"+str(n.id), "label": n.name}})
+			nodes.append({"data": {"target": "n"+str(n.id) , \
+			              "source": "n"+str(n.parent), "id": "e"+str(n.parent)+"."+str(n.id)}})
 		else: # root
-			nodes.append({"data": {"id": n.id, "label": n.name, "bgcol": "red"}})
+			nodes.append({"data": {"id": "n"+str(n.id), "label": n.name, "bgcol": "red"}})
 		
 		for e in n.children:
 			n = cy_list(e)
 			nodes = nodes + n
 	else:
-		nodes.append({"data": {"id": n.id, "label": n.name}})
-		nodes.append({"data": {"target": n.id , "source": n.parent, "id": str(n.parent)+"."+str(n.id)}})
+		nodes.append({"data": {"id": "n"+str(n.id), "label": n.name}})
+		nodes.append({"data": {"target": "n"+str(n.id) , \
+		              "source": "n"+str(n.parent), "id": "e"+str(n.parent)+"."+str(n.id)}})
 	
 	return nodes
 
