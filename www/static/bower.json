@@ -18,6 +18,8 @@
     "tests"
   ],
   "dependencies": {
-    "vis": "^4.16.1"
+    "vis": "^4.16.1",
+    "cytoscape": "^2.7.10",
+    "cytoscape-cxtmenu": "^2.8.0"
   }
 }

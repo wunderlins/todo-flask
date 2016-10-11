@@ -3,8 +3,8 @@
 <head>
   <title>Network | Basic usage</title>
 
-  <script type="text/javascript" src="{{ url_for('static', filename='lib/vis/dist/vis.js') }}"></script>
-  <link href="{{ url_for('static', filename='lib/vis/dist/vis.css') }}" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="{{ url_for('static', filename='lib/cytoscape/dist/cytoscape.js') }}"></script>
+  <!--link href="{{ url_for('static', filename='lib/vis/dist/vis.css') }}" rel="stylesheet" type="text/css" /-->
 
   <style type="text/css">
   	html, body {height: 100%;}
@@ -16,7 +16,9 @@
   	
   	#upper {}
   	
-    #lower {}
+    #lower {
+    	display: block;
+    }
     
     .halfheight {
   		padding: 0; 
@@ -31,6 +33,7 @@
     }
   </style>
   <script type="application/javascript">
+  
 		function add_event(html_element, event_name, event_function) {
 			if (html_element.addEventListener) { // Modern
 				html_element.addEventListener(event_name, event_function, false);
@@ -40,47 +43,45 @@
 				html_element["on" + event_name] = event_function;
 			}
 		};
+		
+		
+		function init_graph() {
+			var cy = cytoscape({
+				container: document.getElementById('lower'), // container to render in
 
-		function json_get(path) {
-			var request = new XMLHttpRequest();
-			request.onreadystatechange = function() {
-				if(request.readyState === 4) {
-					//bio.style.border = '1px solid #e8e8e8';
-					if(request.status === 200) {
-						var data = JSON.parse(request.responseText);
-						console.log(data);
-						build_nodes(data.nodes, data.edges);
-					} else {
-						console.log('An error occurred during your request: ' +  request.status + ' ' + request.statusText);
-					} 
+				elements: [ // list of graph elements to start with
+					{ data: { id: 'a' }},
+					{ data: { id: 'b' }},
+					{ data: { id: 'ab', source: 'a', target: 'b' }} // edge ab 
+				],
+
+				style: [ // the stylesheet for the graph
+					{
+						selector: 'node',
+						style: {
+							'background-color': '#666',
+							'label': 'data(id)'
+						}
+					},
+
+					{
+						selector: 'edge',
+						style: {
+							'width': 3,
+							'line-color': '#ccc',
+							'target-arrow-color': '#ccc',
+							'target-arrow-shape': 'triangle'
+						}
+					}
+				],
+
+				layout: {
+					name: 'grid',
+					rows: 1
 				}
-			}
-			request.open('GET', path);
-			request.send();
+			});
 		}
-				
-		function appinit(nodes, edges) {
-			json_get("/_/get/vis");
-		}
-		
-		function build_nodes(nodes, edges) {
-			
-			// create a network
-			var container = document.getElementById('lower');
-			var data = {
-				nodes: nodes,
-				edges: edges
-			};
-			var options = {
-				manipulation: {
-					addNode: true
-				}
-			};
-			var network = new vis.Network(container, data, options);
-		}
-		
-		add_event(window, "load", appinit);
-		
+		add_event(window, "load", init_graph);
   </script>
   <!--script type="text/javascript" src="/_/get/vis"></script-->
 
