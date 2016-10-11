@@ -65,16 +65,18 @@ def cy_list(n):
 	""" traverse nodes """
 	nodes = []
 	if len(n.children):
-		nodes.append({"data": {"id": n.id, "label": n.name}})
 		if n.parent:
+			nodes.append({"data": {"id": n.id, "label": n.name}})
 			nodes.append({"data": {"target": n.id , "source": n.parent, "id": str(n.parent)+"."+str(n.id)}})
+		else: # root
+			nodes.append({"data": {"id": n.id, "label": n.name, "bgcol": "red"}})
 		
 		for e in n.children:
 			n = cy_list(e)
 			nodes = nodes + n
 	else:
 		nodes.append({"data": {"id": n.id, "label": n.name}})
-		nodes.append({"data": {"target": n.parent , "source": n.id, "id": str(n.parent)+"."+str(n.id)}})
+		nodes.append({"data": {"target": n.id , "source": n.parent, "id": str(n.parent)+"."+str(n.id)}})
 	
 	return nodes
 

@@ -90,7 +90,11 @@
 					{
 						selector: 'node',
 						style: {
-							'background-color': '#666',
+							'background-color': function( ele ){
+								if (ele.data('bgcol'))
+									return ele.data('bgcol')
+								return "#DDD"
+							},
 							'label': 'data(label)'
 						}
 					},
@@ -101,14 +105,19 @@
 							'width': 3,
 							'line-color': '#ccc',
 							'target-arrow-color': '#ccc',
-							'target-arrow-shape': 'triangle'
+							'target-arrow-shape': 'triangle',
+							'curve-style': 'unbundled-bezier',
+							'opacity': 0.666,
+							'width': 'mapData(strength, 70, 100, 2, 6)',
 						}
 					}
 				],
-
+				
 				layout: {
-					name: 'circle',
-					//rows: 1
+					name: 'cose',
+					padding: 10,
+					randomize: true,
+					//roots: '#1'
 				}
 			});
 		
@@ -151,7 +160,7 @@
 				spotlightPadding: 4, // extra spacing in pixels between the element and the spotlight
 				minSpotlightRadius: 24, // the minimum radius in pixels of the spotlight
 				maxSpotlightRadius: 38, // the maximum radius in pixels of the spotlight
-				openMenuEvents: 'cxttapstart taphold', // cytoscape events that will open the menu (space separated)
+				openMenuEvents: 'cxttapstart', // cytoscape events that will open the menu (space separated)
 				itemColor: 'white', // the colour of text in the command's content
 				itemTextShadowColor: 'black', // the text shadow colour of the command's content
 				zIndex: 9999, // the z-index of the ui div
