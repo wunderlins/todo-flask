@@ -60,5 +60,36 @@ def get_vis():
 	(n, e) = vis_list(r)
 	return jsonify({"nodes": n, "edges": e})
 
+
+def cy_list(n):
+	""" traverse nodes """
+	nodes = []
+	if len(n.children):
+		nodes.append({"data": {"id": n.id, "label": n.name}})
+		if n.parent:
+			nodes.append({"data": {"target": n.id , "source": n.parent, "id": str(n.parent)+"."+str(n.id)}})
+		
+		for e in n.children:
+			n = cy_list(e)
+			nodes = nodes + n
+	else:
+		nodes.append({"data": {"id": n.id, "label": n.name}})
+		nodes.append({"data": {"target": n.parent , "source": n.id, "id": str(n.parent)+"."+str(n.id)}})
+	
+	return nodes
+
+@app.route("/_/get/cy")
+def get_cy():
+	"""
+	elements: [ // list of graph elements to start with
+		{ data: { id: 'a', label: "aaaa" }},
+		{ data: { id: 'b', label: 'bbb' }},
+		{ data: { id: 'ab', source: 'a', target: 'b' }} // edge ab 
+	],
+	"""
+	r = Node.query.get(1)
+	ret = cy_list(r)
+	return jsonify({"elements": ret})
+
 if __name__ == "__main__":
 	app.run(port=cfg["webserver"]["port"], host=cfg["webserver"]["host"])
