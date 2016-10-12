@@ -22,6 +22,7 @@ from core import *
 from flask import escape
 from flask import jsonify
 from flask import render_template
+from flask import request
 
 @app.route('/')
 def hello_world():
@@ -94,6 +95,16 @@ def get_cy():
 	r = Node.query.get(1)
 	ret = cy_list(r)
 	return jsonify({"elements": ret})
+
+@app.route("/_/set/cy", methods=['POST'])
+def set_cy():
+	"""
+	{name: String, parent Int}
+	"""
+	#json_dict = json.loads(request.json)
+	post = json.loads(request.data)
+	print post
+	return "done"
 
 if __name__ == "__main__":
 	app.run(port=cfg["webserver"]["port"], host=cfg["webserver"]["host"])
