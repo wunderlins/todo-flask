@@ -14,14 +14,53 @@ var todo = {
 		}
 	},
 	
-	json_get: function(path, callback) {
+	/**
+	 * send xmlhttp request
+	 * 
+	 * Arguments
+	 * - path String - request url
+	 * - callback function - callback(request), request will hold an XMLHttpRequest.request object
+	 * - headers array - 2 dimensional array of request headers
+	 * - method String - the request method: "GET", "POST", "PUT", "DELETE", etc. 
+	 * - body String - the POST/PUT body, unused otherwise
+	 */
+	request: function(path, callback, headers, method, body) {
+		// optional function arguments
+		if (typeof method  === 'undefined') method  = 'GET';
+		if (typeof body    === 'undefined') body    = null;
+		if (typeof headers === 'undefined') headers = [];
+		
+		// create request and set callback
 		var request = new XMLHttpRequest();
+		
+		function req_handler(request) {
+			if(request.readyState === 4) {
+				if (request.status === 200) {
+					callback(request.responseText, request);
+				} else {
+					console.log('request error: ' + request.status + ' ' + request.statusText);
+				}
+			}
+		}
+		
 		request.onreadystatechange = function() {
 			callback(request);
 		}
 		
-		request.open('GET', path);
-		request.send();
+		// open connection
+		request.open(method, path, true);
+		
+		// set request headers
+		for (var i=0; i < headers.length; i++) {
+			var h = headers[i];
+			request.setRequestHeader(h[0], h[1]);
+		}
+		
+		// send request
+		if ((method == "POST" || method == "PUT") && body !== null)
+			request.send(body);
+		else
+			request.send();
 	},
 	
 	init_graph: function(todo_data) {
@@ -151,6 +190,7 @@ var todo = {
 	},
 
 	init: function() {
+		
 		function req_handler(request) {
 			if(request.readyState === 4) {
 				if (request.status === 200) {
@@ -163,7 +203,7 @@ var todo = {
 				}
 			}
 		}
-		todo.json_get("/_/get/cy", req_handler);
+		todo.request("/_/get/cy", req_handler);
 	},
 
 	get_parent: function(ele) {
@@ -193,16 +233,35 @@ var todo = {
 	node_add: function(ele) {
 		// console.log(ele.id());
 		// ask for name
-		//var name = prompt("Task", "");
+		var name = prompt("Task", "");
 
 		if (name == null)
 			return false;	
 		
 		// TODO: show throbber
 		
-		console.log(ele.id().substr(1))
+		var id = parseInt(ele.id().substr(1));
+		console.log(id)
+		
 		
 		// send request
+		var path   = "/_/set/cy";
+		var header = [["Content-Type", "application/json;charset=UTF-8"]];
+		var method = "POST";
+		var body   = JSON.stringify({name: name, parent: id});
+		var callback = function(request) {
+			if(request.readyState === 4) {
+				console.log(request.status)
+				if (request.status === 200) {
+					response = JSON.parse(request.responseText);
+					console.log(response);
+				} else {
+					// FIXME: handle http errors
+					console.log('An error occurred during your request: ' + request.status + ' ' + request.statusText);
+				}
+			}
+		}
+		todo.request(path, callback, header, method, body);
 			// upon success, add node client side
 			// upon error show message
 		// remove throbber
