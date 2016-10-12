@@ -165,6 +165,26 @@ var todo = {
 		}
 		todo.json_get("/_/get/cy", req_handler);
 	},
+
+	get_parent: function(ele) {
+		var parent = null;
+		var nb = ele.neighborhood("node")
+		nb.each(function(i, e) {
+			if (!e.isEdge()) {
+				var edgto = e.edgesTo(ele).id()
+				//console.log(e.edgesTo(ele).parent())
+				if (edgto) {
+					var a = edgto.split(".")
+					var pid = parseInt(a[0].substr(1))
+					parent = todo.cy.nodes("#n"+pid)
+					//console.log(p)
+				}
+			}
+			
+		});
+		
+		return parent;
+	},
 	
 	log: function(msg) {
 		console.log(msg)
@@ -178,17 +198,10 @@ var todo = {
 		if (name == null)
 			return false;	
 		
-		console.log(this.cy)
-		var nb = ele.neighborhood()
-		/*nb.each(function(i, ele) {
-			if (!ele.isEdge())
-				continue;
-			
-		})*/
-		todo.log()
-		todo.log("New name: " + name)
-		// get parent
-		// show throbber
+		// TODO: show throbber
+		
+		console.log(ele.id().substr(1))
+		
 		// send request
 			// upon success, add node client side
 			// upon error show message
