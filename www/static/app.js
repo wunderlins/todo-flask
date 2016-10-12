@@ -178,7 +178,14 @@ var todo = {
 		if (name == null)
 			return false;	
 		
-		todo.log(ele)
+		console.log(this.cy)
+		var nb = ele.neighborhood()
+		/*nb.each(function(i, ele) {
+			if (!ele.isEdge())
+				continue;
+			
+		})*/
+		todo.log()
 		todo.log("New name: " + name)
 		// get parent
 		// show throbber
