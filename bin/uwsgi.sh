@@ -5,8 +5,11 @@
 #echo "$(cat ./etc/config.ini | ./bin/ini2basharr.py)"
 eval "$(cat ./etc/config.ini | ./bin/ini2basharr.py)"
 
+nohup \
 uwsgi --http-socket ${webserver[host]}:${webserver[port]} \
       --plugin python \
       --wsgi-file ./bin/httpd \
       --callable app \
-      --static-map /static=www/static
+      --static-map /static=www/static >> ./var/uwsgi.log &
+
+echo $! > ./var/httpd.pid
