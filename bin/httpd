@@ -22,6 +22,8 @@ from core import *
 from flask import escape
 from flask import jsonify
 from flask import render_template
+from flask import request
+import json
 
 @app.route('/')
 def hello_world():
@@ -93,6 +95,32 @@ def get_cy():
 	"""
 	r = Node.query.get(1)
 	ret = cy_list(r)
+	return jsonify({"elements": ret})
+
+@app.route("/_/set/cy", methods = ["POST"])
+def set_cy():
+	print request.data
+	data = json.loads(request.data)
+	p = Node.query.get(data["parent"])
+	n = Node(data["name"])
+	p.children.append(n)
+	db.session.add(n)
+	db.session.commit()
+	
+	ret = [
+		{
+			"data": {
+				"id": "n" + str(n.id),
+				"label": n.name
+			}
+		}, {
+			"data": {
+				"id": "e" + str(data["parent"]) + "." + str(n.id),
+				"source": "n" + str(data["parent"]),
+				"target": "n" + str(n.id)
+			}
+		}
+	]
 	return jsonify({"elements": ret})
 
 if __name__ == "__main__":

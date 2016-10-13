@@ -253,7 +253,15 @@ var todo = {
 			if(request.readyState === 4) {
 				console.log(request.status)
 				if (request.status === 200) {
-					response = JSON.parse(request.responseText);
+					var response = JSON.parse(request.responseText);
+					/*
+					todo.cy.add(response.elements);
+					todo.cy.$('#'+response.elements[0].data.id).position()
+					
+					FIXME: this is ugly, but positioning manually seems ways to 
+					       time consuming, so we just reload
+					*/
+					todo.init();
 					console.log(response);
 				} else {
 					// FIXME: handle http errors
