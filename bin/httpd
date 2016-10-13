@@ -37,32 +37,6 @@ def get_by_id(id):
 	n = Node.query.get(id).to_dict()
 	return jsonify(**n)
 
-def vis_list(n):
-	""" traverse nodes """
-	nodes = []
-	edges = []
-	if len(n.children):
-		nodes.append({"id": n.id, "label": n.name})
-		if n.parent:
-			edges.append({"from": n.parent , "to": n.id})
-		
-		for e in n.children:
-			(n, e) = vis_list(e)
-			nodes = nodes + n
-			edges = edges + e
-	else:
-		nodes.append({"id": n.id, "label": n.name})
-		edges.append({"from": n.parent , "to": n.id})
-	
-	return (nodes, edges)
-
-@app.route("/_/get/vis")
-def get_vis():
-	r = Node.query.get(1)
-	(n, e) = vis_list(r)
-	return jsonify({"nodes": n, "edges": e})
-
-
 def cy_list(n):
 	""" traverse nodes """
 	nodes = []
