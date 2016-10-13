@@ -10,10 +10,13 @@ body {
 	user-select: none;          /* Likely future */ 
 }
 
-#upper {}
+#upper {
+	display: none;
+}
 
 #lower {
 	display: block;
+	height: 100%;
 }
 
 .halfheight {

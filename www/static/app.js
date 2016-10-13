@@ -101,8 +101,11 @@ var todo = {
 			layout: {
 				name: 'cose',
 				padding: 10,
+				animate: true,
 				randomize: true,
-				//roots: '#1'
+				//roots: '#1',
+				// Node repulsion (overlapping) multiplier
+				nodeOverlap: 10,
 			}
 		});
 
@@ -255,12 +258,16 @@ var todo = {
 				if (request.status === 200) {
 					var response = JSON.parse(request.responseText);
 					/*
-					todo.cy.add(response.elements);
 					todo.cy.$('#'+response.elements[0].data.id).position()
 					
 					FIXME: this is ugly, but positioning manually seems ways to 
 					       time consuming, so we just reload
 					*/
+					
+					// TODO: this is an example how to align nodes
+					//todo.cy.add(response.elements);
+					//todo.cy.collection("[id = '#"+response.elements[0].data.id+"']").makeLayout({name: "cose"}).run()
+					
 					todo.init();
 					console.log(response);
 				} else {
