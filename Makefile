@@ -22,3 +22,8 @@ clean:
 
 dump:
 	sqlite3 var/notes.db .dump
+
+cert:
+	rm etc/certs/* | true
+	bin/gencert.sh localhost
+
