@@ -98,9 +98,39 @@ def set_cy():
 	return jsonify({"elements": ret})
 
 if __name__ == "__main__":
-	ssl_keys = (
-		"etc/certs/localhost.csr",
-		"etc/certs/localhost.key"
-	)
-	app.run(port=cfg["webserver"]["port"], host=cfg["webserver"]["host"],
-	ssl_context=**ssl_keys) 
+	
+	# handle ssl keys if they are configured and readable
+	ssl_key_private = None
+	ssl_key_public = None
+	try:
+		ssl_key_private = str(cfg["ssl"]['private_key']), # "etc/certs/localhost.csr",
+		ssl_key_public = str(cfg["ssl"]['public_key']), # "etc/certs/localhost.key"
+		ssl_key_private = ssl_key_private[0]
+		ssl_key_public = ssl_key_public[0]
+	except:
+		pass
+	
+	# check if the files exist and are readable
+	try:
+		if os.path.isfile(ssl_key_private) == False: 
+			print "Cannot read public key: %s" % ssl_key_private
+			ssl_key_private = None
+	except TypeError as e:
+		ssl_key_private = None
+					
+	try:
+		if os.path.isfile(ssl_key_public) == False: 
+			print "Cannot read private key: %s" % ssl_key_public
+			ssl_key_public = None
+	except TypeError as e:
+		ssl_key_public = None
+	
+	# run the webserver
+	if ssl_key_private != None and ssl_key_public != None:
+		# https
+		app.run(port=cfg["webserver"]["port"], host=cfg["webserver"]["host"], \
+			ssl_context = (ssl_key_private, ssl_key_public), threaded=True, debug=True)
+	else:
+		# http
+		app.run(port=cfg["webserver"]["port"], host=cfg["webserver"]["host"]) 
+
