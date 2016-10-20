@@ -1,4 +1,4 @@
-.PHONY:
+.PHONY: kill
 
 bower:
 	cd www/static; bower install
@@ -27,3 +27,5 @@ keygen:
 	rm etc/certs/* | true
 	bin/gencert.sh
 
+kill:
+	kill -KILL `lsof -i :8001|awk 'NR>1 {print $$2}'|sort|uniq` 2>/dev/null | true

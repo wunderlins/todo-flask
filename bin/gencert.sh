@@ -18,6 +18,7 @@ email=me@example.com
  
 #Optional
 password=$(dd if=/dev/urandom bs=3 count=8)
+password=
 
 prefix=etc/certs
  

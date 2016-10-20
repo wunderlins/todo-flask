@@ -128,8 +128,10 @@ if __name__ == "__main__":
 	# run the webserver
 	if ssl_key_private != None and ssl_key_public != None:
 		# https
+		ssl_ctx = (os.path.realpath(ssl_key_private), os.path.realpath(ssl_key_public))
+		ssl_ctx = "adhoc"
 		app.run(port=cfg["webserver"]["port"], host=cfg["webserver"]["host"], \
-			ssl_context = (ssl_key_private, ssl_key_public), threaded=True, debug=True)
+			ssl_context = ssl_ctx, threaded=True, debug=True)
 	else:
 		# http
 		app.run(port=cfg["webserver"]["port"], host=cfg["webserver"]["host"]) 
