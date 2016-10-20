@@ -21,6 +21,12 @@ import click
 from core import *
 
 @app.cli.command()
+def displaycfg():
+	""" display the configuration """
+	for e in cfg:
+		print "%s: %s" % (e, cfg[e])
+
+@app.cli.command()
 def displayrec():
 	""" display the root node """
 	root = Node.query.get(1)

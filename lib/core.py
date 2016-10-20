@@ -28,6 +28,9 @@ for s in _cfg.sections():
 		#print "%s: %s" % (o, _cfg.get(s, o))
 		cfg[s][o] = _cfg.get(s, o)
 		
+		if cfg[s][o] == "":
+			cfg[s][o] = None
+		
 		# cast int values to int
 		if s == "webserver" and o == "port" or \
 		   s == "flask" and o == "debug":

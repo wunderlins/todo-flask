@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
- 
-#Required
-domain=$1
+
+echo $argc
+if [[ "$#" -eq 0 ]]; then
+	domain=`hostname -A | sed 's/[ \t]*$//'`
+else
+	domain=$1
+fi
 commonname=$domain
  
 #Change to your company details

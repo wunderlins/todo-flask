@@ -98,4 +98,9 @@ def set_cy():
 	return jsonify({"elements": ret})
 
 if __name__ == "__main__":
-	app.run(port=cfg["webserver"]["port"], host=cfg["webserver"]["host"])
+	ssl_keys = (
+		"etc/certs/localhost.csr",
+		"etc/certs/localhost.key"
+	)
+	app.run(port=cfg["webserver"]["port"], host=cfg["webserver"]["host"],
+	ssl_context=**ssl_keys) 
