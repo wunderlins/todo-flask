@@ -143,4 +143,19 @@ class Node(db.Model):
 			"numc": len(self.children)
 		}
 
+class Person(db.Model):
+	id     = db.Column(db.Integer, primary_key=True)
+	# this field is required, must be unique and is treated as key
+	nick   = db.Column(db.String(80))
+	
+	firstname = db.Column(db.String(80))
+	lastname  = db.Column(db.String(80))
+	email     = db.Column(db.String(80))
+	phone     = db.Column(db.String(80))
+	
+	def __init__(self, nick):
+		self.nick = nick
+
+	def __repr__(self):
+			return '<Person %s>' % (self.nick)
 
