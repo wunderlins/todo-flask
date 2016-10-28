@@ -142,3 +142,5 @@ class Node(db.Model):
 			"parent": self.parent,
 			"numc": len(self.children)
 		}
+
+

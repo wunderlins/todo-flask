@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
-export EDITOR="/usr/bin/gedit"
+os=`uname`
+
+if [[ "$os" == "Darwin" ]]; then
+	PS1="$PS1" /opt/local/bin/bash
+else
+	export EDITOR="/usr/bin/gedit"
+fi
 
 function mf {
 	touch "$1"

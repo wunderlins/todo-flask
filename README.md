@@ -31,3 +31,8 @@ Check `etc/config.ini`
 	var/notes.db    - main database (sqlite3)
 
 
+# TODO
+## Database Schema
+- add flexible Node type configurarion. Base type shall have an id and name which should be inherited by all children. 
+- Add a Person data type which may be `M:M` referenced from any Node and multiple properties per Node
+- .
