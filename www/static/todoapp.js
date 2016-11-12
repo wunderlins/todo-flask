@@ -5,6 +5,13 @@
  */
 var TodoApp = angular.module("TodoApp", []);
 
+// prevent collision with flask template variable notation which 
+// also uses {{ and }}
+TodoApp.config(function($interpolateProvider) {
+	$interpolateProvider.startSymbol('[[');
+	$interpolateProvider.endSymbol(']]');
+});
+
 function appController($scope) {
   $scope.items = [
     {name: "name 1", location: "location 1"},

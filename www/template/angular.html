@@ -18,9 +18,7 @@
 	</form>
 
 	<ul>
-		{% raw %}
-		<li data-ng-repeat="item in items | orderBy: 'name' | filter: searchName">{{item.name}} / {{item.location}}</li>
-		{% endraw %}
+		<li data-ng-repeat="item in items | orderBy: 'name' | filter: searchName">[[item.name]] / [[item.location]]</li>
 	</ul>
 
 
