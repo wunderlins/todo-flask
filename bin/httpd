@@ -26,11 +26,15 @@ from flask import request
 import json
 
 @app.route('/')
-def hello_world():
-	ret = json.dumps(app.config, indent=4, default=lambda x:str(x))
-	root = Node.query.get(1)
+def node_map():
+	#ret = json.dumps(app.config, indent=4, default=lambda x:str(x))
+	#root = Node.query.get(1)
 	#return "Root: " + escape(str(root))
-	return render_template('index.html', root=root)
+	return render_template('index.html')
+
+@app.route('/angular')
+def angular():
+	return render_template('angular.html')
 
 @app.route("/_/get/<int:id>")
 def get_by_id(id):
