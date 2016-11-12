@@ -1,20 +1,33 @@
-<!doctype html>
-<html>
-<head>
-  <title>Network | Basic usage</title>
-	
-  <script type="text/javascript" src="{{ url_for('static', filename='lib/jquery/dist/jquery.min.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='lib/cytoscape/dist/cytoscape.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='lib/cytoscape-cxtmenu/cytoscape-cxtmenu.js') }}"></script>
-  <script type="application/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
-  <link href="{{ url_for('static', filename='app.css') }}" rel="stylesheet" type="text/css" />
+<!DOCTYPE html>
 
+<html data-ng-app="TodoApp" lang="en">
+<head>
+  <title>Todo</title>
+  <link href="{{ url_for('static', filename='app.css') }}" rel="stylesheet" type="text/css" />
 </head>
 <body>
 
-<div id="upper" class="halfheight"></div>
-<div id="lower" class="halfheight"></div>
+<div data-ng-controller="appController">
 
+
+	<form class="form-inline">
+		<div class="form-group">
+			<label for="searchName">Name</label>
+			<input type="text" id="searchName" data-ng-model="searchName" class="form-control" placeholder="Search">
+		</div>
+	</form>
+
+	<ul>
+		{% raw %}
+		<li data-ng-repeat="item in items | orderBy: 'name' | filter: searchName">{{item.name}} / {{item.location}}</li>
+		{% endraw %}
+	</ul>
+
+
+</div>
+
+<script type="text/javascript" src="{{ url_for('static', filename='lib/angular/angular.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='todoapp.js') }}"></script>
 
 </body>
 </html>
