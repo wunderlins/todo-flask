@@ -49,12 +49,11 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr data-ng-repeat="item in items.elements | orderBy: 'item.data.id' | filter: searchName">
+			<tr data-ng-repeat="item in tree.elements | orderBy: 'item.data.id' | filter: searchName">
 				<td data-ng-if="item.data.id.indexOf('n') == 0">
-					<button ng-click='get_by_strid(item.data.id)'>[[item.data.id]]</button>
+					<button ng-click='get_by_id(item.data.id)'>[[item.data.id]]</button>
 				</td>
 				<td data-ng-if="item.data.id.indexOf('n') != 0">[[item.data.id]]</td>
-				
 				
 				<td>[[item.data.label]]</td>
 				<td>[[item.data.source]]</td>

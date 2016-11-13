@@ -3,6 +3,7 @@
  * Author: Simon Wunderlin
  * Copyright, 2015, simon Wunderlin
  */
+"use strict";
 var TodoApp = angular.module("TodoApp", []);
 
 // prevent collision with flask template variable notation which 
@@ -30,23 +31,20 @@ TodoApp.factory("globals", function($window, $http) {
 	return factory;
 });
 
-
 TodoApp.factory("node", ["globals", "$http", function(globals, $http) {
 	var factory = {
 		response: null,
 		error: null,
-		status: null,
-		data: null,
-		scope: null
+		data: null
 	};
 	
 	function success_callback(response) {
 		factory.response = response;
 		factory.data = [];
-		factory.status = response.status;
 		factory.error = false;
 		
-		var r = []
+		var r = [];
+		var e, el = null;
 		for (e in response.data) {
 			el = {name: e, value: response.data[e], mutable: false};
 			if (el["name"] == "name" || el["name"] == "comment")
@@ -59,13 +57,11 @@ TodoApp.factory("node", ["globals", "$http", function(globals, $http) {
 	function error_callback(response) {
 		factory.response = response;
 		factory.data = [];
-		factory.status = response.status;
 		factory.error = true;
 		console.log("error in node.fetch, result: " + response.statusText)
 	}
 
 	factory.fetch = function(id) {
-		//console.log(globals.urls.by_id + id)
 		$http.get(globals.urls.by_id + id).then(success_callback, error_callback);
 	};
 	
@@ -84,19 +80,15 @@ function _appController($scope, $window, nodes_service, node, globals) {
 	
 	$scope.get_all = function() {
 		nodes_service.fetch(globals.urls.all, function(response) {
-			$scope.items = response.data;
+			$scope.tree = response.data;
 		}, function(response) {
-			$scope.last_code = response.status;
-			$scope.items = [];
+			$scope.tree = [];
 		});	
 	}
 	
-	$scope.get_by_strid = function(strid) {
-		var id = strid.substr(1, strid.length)
-		node.fetch(id);
-	}	
-	
 	$scope.get_by_id = function(id) {
+		if (id.substr(0, 1) == 'n')
+			var id = id.substr(1, id.length)
 		node.fetch(id);
 	}	
 	
