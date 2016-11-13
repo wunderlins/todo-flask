@@ -4,6 +4,9 @@
 <head>
   <title>Todo</title>
   <link href="{{ url_for('static', filename='app.css') }}" rel="stylesheet" type="text/css" />
+  <script type="appliaction/javascript">
+  var url_getcy = "{{ url_for('get_cy') }}";
+  </script>
 </head>
 <body>
 
@@ -17,10 +20,26 @@
 		</div>
 	</form>
 
-	<ul>
-		<li data-ng-repeat="item in items | orderBy: 'name' | filter: searchName">[[item.name]] / [[item.location]]</li>
-	</ul>
-
+	<table border="1">
+		<thead>
+			<tr>
+				<th>id</th>
+				<th>label</th>
+				<th>source</th>
+				<th>target</th>
+				<th>bgcol</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-ng-repeat="item in items.elements | orderBy: 'item.data.id' | filter: searchName">
+				<td>[[item.data.id]]</td>
+				<td>[[item.data.label]]</td>
+				<td>[[item.data.source]]</td>
+				<td>[[item.data.target]]</td>
+				<td>[[item.data.bgcol]]</td>
+			</tr>
+		</tbody>
+	</table>
 
 </div>
 

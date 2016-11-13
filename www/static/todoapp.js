@@ -12,12 +12,18 @@ TodoApp.config(function($interpolateProvider) {
 	$interpolateProvider.endSymbol(']]');
 });
 
-function appController($scope) {
-  $scope.items = [
-    {name: "name 1", location: "location 1"},
-    {name: "name 3", location: "location 3"},
-    {name: "name 2", location: "location 2"}
-  ];
-};
+TodoApp.factory("nodes_service", function($window, $http) {
+	var factory = {};
+	var items = {};
+	
+	factory.getItems = function(callback) {
+		$http.get('/_/get/cy').success(callback);
+	};
+	
+	return factory;
+});
 
-TodoApp.controller("appController", appController);
+TodoApp.controller("appController", function appController($scope, $window, nodes_service) {
+	//$scope.items = nodes_service.getItems();
+	nodes_service.getItems(function(data) {$scope.items = data;});
+});
