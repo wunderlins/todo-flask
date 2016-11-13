@@ -16,14 +16,22 @@ TodoApp.factory("nodes_service", function($window, $http) {
 	var factory = {};
 	var items = {};
 	
-	factory.getItems = function(callback) {
-		$http.get('/_/get/cy').success(callback);
+	factory.fetch_all = function(url, callback) {
+		$http.get(url).success(callback);
 	};
 	
 	return factory;
 });
 
-TodoApp.controller("appController", function appController($scope, $window, nodes_service) {
-	//$scope.items = nodes_service.getItems();
-	nodes_service.getItems(function(data) {$scope.items = data;});
-});
+function _appController($scope, $window, nodes_service) {
+	console.log(url_getcy)
+	$scope.getnode = url_getcy;
+	$scope.get_all = function() {
+		nodes_service.fetch_all('/_/get/cy', function(data) {
+			$scope.items = data;
+		});	
+	}
+	
+	//$scope.get_all();
+}
+TodoApp.controller("appController", ['$scope', '$window', 'nodes_service', _appController]);
