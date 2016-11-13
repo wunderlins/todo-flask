@@ -87,7 +87,7 @@ function _appController($scope, $window, nodes_service, node, globals) {
 	}
 	
 	$scope.get_by_id = function(id) {
-		if (id.substr(0, 1) == 'n')
+		if (id.substr(0, 1) == 'n') // handle string ids starting with 'n'
 			var id = id.substr(1, id.length)
 		node.fetch(id);
 	}	
