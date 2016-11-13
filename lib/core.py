@@ -10,6 +10,7 @@ else:
 sys.path.insert(1, os.path.join(basedir, "lib/site-packages"))
 sys.path.insert(1, os.path.join(basedir, "lib"))
 
+import datetime
 from flask import Flask
 from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -121,6 +122,8 @@ class Node(db.Model):
 	# note properties
 	comment = db.Column(db.Text)
 	ts_ins  = db.Column(db.DateTime)
+	# FIXME: check if create and mutation date timestamps can be automated with flask-sqlalchemy
+	#ts_ins  = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 	ts_mut  = db.Column(db.DateTime)
 	
 	# FIXME: add path variable to nodes for quicker lookups by name
@@ -140,7 +143,10 @@ class Node(db.Model):
 			"id": self.id,
 			"name": self.name,
 			"parent": self.parent,
-			"numc": len(self.children)
+			"numc": len(self.children),
+			"comment": self.comment,
+			"ts_ins": self.ts_ins,
+			"ts_mut": self.ts_mut,
 		}
 
 class Person(db.Model):

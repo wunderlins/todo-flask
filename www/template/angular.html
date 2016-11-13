@@ -9,7 +9,26 @@
 
 <div data-ng-init='init({{ urls|tojson|safe }})' data-ng-controller="appController">
 
-
+	<input type="text" size="3" name="id" value=""/>
+	<button>Fetch by ID</button>
+	
+	
+	<table border="1" cellspasing="0">
+		<thead>
+			<tr>
+				<th>name</th>
+				<th>value</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>--</td>
+				<td>--</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<hr/>
 	<form class="form-inline">
 		<div class="form-group">
 			<label for="searchName">Name</label>
