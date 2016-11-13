@@ -23,6 +23,8 @@ from flask import escape
 from flask import jsonify
 from flask import render_template
 from flask import request
+from flask import url_for
+
 import json
 
 @app.route('/')
@@ -34,7 +36,11 @@ def node_map():
 
 @app.route('/angular')
 def angular():
-	return render_template('angular.html')
+	urls = {
+		"all": url_for('get_cy'),
+		"by_id": url_for('get_by_id', id=-1)
+	}
+	return render_template('angular.html', urls=urls)
 
 @app.route("/_/get/<int:id>")
 def get_by_id(id):

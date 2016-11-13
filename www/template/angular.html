@@ -4,13 +4,10 @@
 <head>
   <title>Todo</title>
   <link href="{{ url_for('static', filename='app.css') }}" rel="stylesheet" type="text/css" />
-  <script type="appliaction/javascript">
-  var url_getcy = "{{ url_for('get_cy') }}";
-  </script>
 </head>
 <body>
 
-<div data-ng-controller="appController">
+<div data-ng-init='init({{ urls|tojson|safe }})' data-ng-controller="appController">
 
 
 	<form class="form-inline">

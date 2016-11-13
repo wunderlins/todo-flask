@@ -24,14 +24,16 @@ TodoApp.factory("nodes_service", function($window, $http) {
 });
 
 function _appController($scope, $window, nodes_service) {
-	console.log(url_getcy)
-	$scope.getnode = url_getcy;
 	$scope.get_all = function() {
-		nodes_service.fetch_all('/_/get/cy', function(data) {
+		nodes_service.fetch_all($scope.urls.all, function(data) {
 			$scope.items = data;
 		});	
 	}
 	
-	//$scope.get_all();
+	$scope.init = function(u){
+		$scope.urls = u;
+		$scope.get_all();
+	}
+	
 }
 TodoApp.controller("appController", ['$scope', '$window', 'nodes_service', _appController]);
