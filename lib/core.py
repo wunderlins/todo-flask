@@ -139,7 +139,7 @@ class Node(db.Model):
 		return '<Node [%d/%s/%d] %s>' % (self.id, self.parent, len(self.children), self.name)
 		
 	def to_dict(self):
-		return {
+		ret = {
 			"id": self.id,
 			"name": self.name,
 			"parent": self.parent,
@@ -148,6 +148,11 @@ class Node(db.Model):
 			"ts_ins": self.ts_ins,
 			"ts_mut": self.ts_mut,
 		}
+		
+		if not ret["parent"]:
+			ret["parent"] = 0
+		
+		return ret
 
 class Person(db.Model):
 	id     = db.Column(db.Integer, primary_key=True)

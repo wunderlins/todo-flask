@@ -9,11 +9,11 @@
 
 <div data-ng-init='init({{ urls|tojson|safe }})' data-ng-controller="appController">
 
-	<input type="text" size="3" name="id" value=""/>
-	<button>Fetch by ID</button>
+	<input type="text" size="3" name="id" value="" data-ng-model="get_id" placeholder="ID"/>
+	<button ng-click="get_by_id(get_id)">Fetch by ID</button>
 	
 	
-	<table border="1" cellspasing="0">
+	<table border="1" cellspacing="0">
 		<thead>
 			<tr>
 				<th>name</th>
@@ -21,9 +21,10 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-				<td>--</td>
-				<td>--</td>
+			<tr data-ng-repeat="i in item">
+				<td>[[i.name]]</td>
+				<td data-ng-if="i.mutable"><input type="text" value="[[i.value]]"/></td>
+				<td data-ng-if="i.mutable == false">[[i.value]]</td>
 			</tr>
 		</tbody>
 	</table>
@@ -32,12 +33,12 @@
 	<form class="form-inline">
 		<div class="form-group">
 			<label for="searchName">Name</label>
-			<input type="text" id="searchName" data-ng-model="searchName" class="form-control" placeholder="Search">
+			<input type="text" id="searchName" data-ng-model="searchName" placeholder="Search">
 			<button ng-click="get_all();">GET</button>
 		</div>
 	</form>
 
-	<table border="1">
+	<table border="1" cellspacing="0">
 		<thead>
 			<tr>
 				<th>id</th>

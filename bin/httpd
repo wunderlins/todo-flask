@@ -24,6 +24,7 @@ from flask import jsonify
 from flask import render_template
 from flask import request
 from flask import url_for
+from flask import abort
 
 import json
 
@@ -38,14 +39,16 @@ def node_map():
 def angular():
 	urls = {
 		"all": url_for('get_cy'),
-		"by_id": url_for('get_by_id', id=-1)
+		"by_id": url_for('get_by_id', id=-1)[:-2]
 	}
 	return render_template('angular.html', urls=urls)
 
 @app.route("/_/get/<int:id>")
 def get_by_id(id):
-	n = Node.query.get(id).to_dict()
-	return jsonify(**n)
+	n = Node.query.get(id)
+	if not n:
+		abort(404)
+	return jsonify(**n.to_dict())
 
 def cy_list(n):
 	""" traverse nodes """
