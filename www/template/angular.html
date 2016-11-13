@@ -21,7 +21,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr data-ng-repeat="i in item">
+			<tr data-ng-repeat="i in node">
 				<td>[[i.name]]</td>
 				<td data-ng-if="i.mutable"><input type="text" value="[[i.value]]"/></td>
 				<td data-ng-if="i.mutable == false">[[i.value]]</td>
@@ -50,7 +50,12 @@
 		</thead>
 		<tbody>
 			<tr data-ng-repeat="item in items.elements | orderBy: 'item.data.id' | filter: searchName">
-				<td>[[item.data.id]]</td>
+				<td data-ng-if="item.data.id.indexOf('n') == 0">
+					<button ng-click='get_by_strid(item.data.id)'>[[item.data.id]]</button>
+				</td>
+				<td data-ng-if="item.data.id.indexOf('n') != 0">[[item.data.id]]</td>
+				
+				
 				<td>[[item.data.label]]</td>
 				<td>[[item.data.source]]</td>
 				<td>[[item.data.target]]</td>
