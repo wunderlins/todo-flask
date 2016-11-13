@@ -24,7 +24,7 @@ TodoApp.factory("nodes_service", function($window, $http) {
 
 TodoApp.factory("globals", function($window, $http) {
 	var factory = {
-		urls: [];
+		urls: []
 	};
 	
 	return factory;
