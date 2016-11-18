@@ -14,6 +14,7 @@ import datetime
 from flask import Flask
 from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Table, MetaData, Column, Integer, ForeignKey
 import json
 
 # read configuration file
@@ -74,7 +75,7 @@ class NodeError(Exception):
 	message = None
 	__errors = [
 		"Unknown", # 0
-		"Name"
+		"Node Name"
 	]
 	__err_messages = [
 		"An unhandled error occured",
@@ -95,6 +96,33 @@ class NodeError(Exception):
 	
 	def __repr__(self):
 		return "<NodeError: " + str(self.code) + " " + self.message + ">"
+
+""" Many to Many relationship definition for Node<->Person """
+association_table = Table('association', MetaData(),
+	Column('person_id', Integer, ForeignKey('person.id')),
+	Column('node_id', Integer, ForeignKey('node.id'))
+)
+
+class Person(db.Model):
+	# database options
+	__tablename__ = 'person'
+	
+	id     = db.Column(db.Integer, primary_key=True)
+	# this field is required, must be unique and is treated as key
+	nick   = db.Column(db.String(80))
+	
+	firstname = db.Column(db.String(80))
+	lastname  = db.Column(db.String(80))
+	email     = db.Column(db.String(80))
+	phone     = db.Column(db.String(80))
+
+	sAMAccountName  = db.Column(db.String(256))
+	
+	def __init__(self, nick):
+		self.nick = nick
+
+	def __repr__(self):
+			return '<Person [%d] %s>' % ( self.id, self.nick)
 
 class Node(db.Model):
 	"""Node tree class
@@ -153,20 +181,4 @@ class Node(db.Model):
 			ret["parent"] = 0
 		
 		return ret
-
-class Person(db.Model):
-	id     = db.Column(db.Integer, primary_key=True)
-	# this field is required, must be unique and is treated as key
-	nick   = db.Column(db.String(80))
-	
-	firstname = db.Column(db.String(80))
-	lastname  = db.Column(db.String(80))
-	email     = db.Column(db.String(80))
-	phone     = db.Column(db.String(80))
-	
-	def __init__(self, nick):
-		self.nick = nick
-
-	def __repr__(self):
-			return '<Person %s>' % (self.nick)
 
