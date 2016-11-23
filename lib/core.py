@@ -1,12 +1,16 @@
 import sys, os
 if getattr(sys, 'frozen', False):
 	# we are running in a bundle
-	basedir = sys._MEIPASS
-	exe     = os.path.realpath(sys.executable)
+	basedir  = sys._MEIPASS
+	exe      = os.path.realpath(sys.executable)
+	cfg_file = os.path.dirname(exe) + "/config.ini"
 else:
 	# we are running in a normal Python environment
 	basedir = os.path.realpath(os.path.dirname(__file__) + "/..")
 	exe     = os.path.realpath(sys.argv[0])
+	cfg_file = basedir + "/etc/config.ini"
+
+sys.path.insert(1, os.path.join(basedir, "lib/site-packages/email"))
 sys.path.insert(1, os.path.join(basedir, "lib/site-packages"))
 sys.path.insert(1, os.path.join(basedir, "lib"))
 
@@ -17,13 +21,33 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table, MetaData, Column, Integer, ForeignKey
 import json
 
+def config_default(cfg_file):
+	if not os.path.exists(cfg_file):
+		cfg_file = open(cfg_file, "wb")
+		cfg_file.write("""[flask]
+DEBUG = 1
+
+[webserver]
+host = 0.0.0.0
+port = 8001
+
+[ssl]
+; leave empty for no ssl, use "make keygen" to generate a development key
+; paths must be relative to the base directory or absolute
+;private_key = etc/certs/shell1.intra.wunderlin.net.csr
+;public_key = etc/certs/shell1.intra.wunderlin.net.key
+
+""")
+		cfg_file.close()
+config_default(cfg_file)
+
 # read configuration file
 import ConfigParser
 cfg = {}
 _cfg = ConfigParser.ConfigParser()
 # FIXME: move config directory to absolute path (sitewide) or peofile directory
 #        to make this work as work with pyinstaller
-_cfg.read("/home/wunderlins/Projects/todo-flask" + "/etc/config.ini")
+_cfg.read(cfg_file)
 
 for s in _cfg.sections():
 	#print "[" + s + "]"

@@ -11,6 +11,8 @@ else:
 	# we are running in a normal Python environment
 	basedir = os.path.realpath(os.path.dirname(__file__) + "/..")
 	exe     = os.path.realpath(sys.argv[0])
+
+sys.path.insert(1, os.path.join(basedir, "lib/site-packages/email"))
 sys.path.insert(1, os.path.join(basedir, "lib/site-packages"))
 sys.path.insert(1, os.path.join(basedir, "lib"))
 
