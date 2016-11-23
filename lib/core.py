@@ -21,7 +21,9 @@ import json
 import ConfigParser
 cfg = {}
 _cfg = ConfigParser.ConfigParser()
-_cfg.read(basedir + "/etc/config.ini")
+# FIXME: move config directory to absolute path (sitewide) or peofile directory
+#        to make this work as work with pyinstaller
+_cfg.read("/home/wunderlins/Projects/todo-flask" + "/etc/config.ini")
 
 for s in _cfg.sections():
 	#print "[" + s + "]"

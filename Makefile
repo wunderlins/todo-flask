@@ -11,7 +11,7 @@ pip:
 dep: bower pip
 
 linux:
-	pyinstaller --clean -s -n cli --paths=lib/ --paths=lib/site-packages/ --distpath dist/linux -F bin/cli
+	pyinstaller --clean -s -n cli --paths=lib/ --paths=lib/site-packages/ --paths=--paths=lib/site-packages/flask --paths=lib/site-packages/flask_sqlalchemy --distpath dist/linux -F bin/cli
 	
 clean:
 	rm -rf build | true

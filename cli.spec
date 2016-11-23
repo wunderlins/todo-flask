@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['bin/cli'],
-             pathex=['lib/', 'lib/site-packages/', '/home/wunderlins/Projects/todo-flask'],
+             pathex=['lib/', 'lib/site-packages/', '--paths=lib/site-packages/flask', 'lib/site-packages/flask_sqlalchemy', '/home/wunderlins/Projects/todo-flask'],
              binaries=None,
              datas=None,
              hiddenimports=[],

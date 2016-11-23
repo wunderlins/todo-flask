@@ -3,8 +3,16 @@
 Check: http://js.cytoscape.org/#demos for graphing
 
 ## install development environment
+Install pip, bower
+	
+	$ sudo apt-get install python-pip nodejs python-dev build-essential
+	$ sudo npm install bower -g	
 
 	$ ./bin/setup.sh
+
+Optional for building binaries (do not install into project directory)
+
+	$ sudo pip install pyinstaller==3.1.1
 
 ## configuration
 Check `etc/config.ini`
